@@ -18,7 +18,6 @@
 #define SYSTEM_MEDIA_PRIVATE_INCLUDE_CAMERA_METADATA_HIDDEN_H
 
 #include <stdint.h>
-#include <cutils/compiler.h>
 #include <system/camera_metadata.h>
 #include <system/camera_vendor_tags.h>
 
@@ -42,49 +41,42 @@ extern "C" {
  * structure when parsing camera metadata with functions defined in
  * system/media/camera/include/camera_metadata.h.
  */
-ANDROID_API
 int set_camera_metadata_vendor_cache_ops(
         const struct vendor_tag_cache_ops *query_cache_ops);
 
 /**
  * Set the vendor id for a particular metadata buffer.
  */
-ANDROID_API
 void set_camera_metadata_vendor_id(camera_metadata_t *meta,
         metadata_vendor_id_t id);
 
 /**
  * Retrieve the vendor id for a particular metadata buffer.
  */
-ANDROID_API
 metadata_vendor_id_t get_camera_metadata_vendor_id(
         const camera_metadata_t *meta);
 
 /**
  * Retrieve the type of a tag. Returns -1 if no such tag is defined.
  */
-ANDROID_API
 int get_local_camera_metadata_tag_type_vendor_id(uint32_t tag,
         metadata_vendor_id_t id);
 
 /**
  * Retrieve the name of a tag. Returns NULL if no such tag is defined.
  */
-ANDROID_API
 const char *get_local_camera_metadata_tag_name_vendor_id(uint32_t tag,
         metadata_vendor_id_t id);
 
 /**
  * Retrieve the name of a tag section. Returns NULL if no such tag is defined.
  */
-ANDROID_API
 const char *get_local_camera_metadata_section_name_vendor_id(uint32_t tag,
         metadata_vendor_id_t id);
 
 /**
  * Retrieve the type of a tag. Returns -1 if no such tag is defined.
  */
-ANDROID_API
 int get_local_camera_metadata_tag_type_vendor_id(uint32_t tag,
         metadata_vendor_id_t id);
 

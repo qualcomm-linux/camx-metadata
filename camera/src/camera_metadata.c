@@ -25,7 +25,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <log/log.h>
+#include <stddef.h>
+#define android_errorWriteLog(...)
+#define ALOGE(...)
 
 #define OK              0
 #define ERROR           1

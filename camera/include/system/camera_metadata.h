@@ -25,7 +25,6 @@
 #include <sys/cdefs.h>
 #include <string.h>
 #include <stdint.h>
-#include <cutils/compiler.h>
 #include <system/camera_vendor_tags.h>
 
 __BEGIN_DECLS
@@ -44,9 +43,7 @@ __BEGIN_DECLS
 /**
  * Enum range for each top-level category
  */
-ANDROID_API
 extern unsigned int camera_metadata_section_bounds[ANDROID_SECTION_COUNT][2];
-ANDROID_API
 extern const char *camera_metadata_section_names[ANDROID_SECTION_COUNT];
 
 /**
@@ -119,13 +116,11 @@ typedef struct camera_metadata_ro_entry {
 /**
  * Size in bytes of each entry type
  */
-ANDROID_API
 extern const size_t camera_metadata_type_size[NUM_TYPES];
 
 /**
  * Human-readable name of each entry type
  */
-ANDROID_API
 extern const char* camera_metadata_type_names[NUM_TYPES];
 
 /**
@@ -168,7 +163,6 @@ typedef struct camera_metadata camera_metadata_t;
  * data_capacity in bytes. The resulting structure is all contiguous in memory,
  * and can be freed with free_camera_metadata().
  */
-ANDROID_API
 camera_metadata_t *allocate_camera_metadata(size_t entry_capacity,
         size_t data_capacity);
 
@@ -177,7 +171,6 @@ camera_metadata_t *allocate_camera_metadata(size_t entry_capacity,
  * maximal alignment of the embedded camera_metadata, camera_metadata_buffer_entry,
  * and camera_metadata_data.
  */
-ANDROID_API
 size_t get_camera_metadata_alignment();
 
 /**
@@ -187,7 +180,6 @@ size_t get_camera_metadata_alignment();
  *
  * The resulting pointer can be freed with free_camera_metadata().
  */
-ANDROID_API
 camera_metadata_t *allocate_copy_camera_metadata_checked(
         const camera_metadata_t *src,
         size_t src_size);
@@ -202,7 +194,6 @@ camera_metadata_t *allocate_copy_camera_metadata_checked(
  * responsibility to free the original buffer; do not call
  * free_camera_metadata() with the returned pointer.
  */
-ANDROID_API
 camera_metadata_t *place_camera_metadata(void *dst, size_t dst_size,
         size_t entry_capacity,
         size_t data_capacity);
@@ -211,14 +202,12 @@ camera_metadata_t *place_camera_metadata(void *dst, size_t dst_size,
  * Free a camera_metadata structure. Should only be used with structures
  * allocated with allocate_camera_metadata().
  */
-ANDROID_API
 void free_camera_metadata(camera_metadata_t *metadata);
 
 /**
  * Calculate the buffer size needed for a metadata structure of entry_count
  * metadata entries, needing a total of data_count bytes of extra data storage.
  */
-ANDROID_API
 size_t calculate_camera_metadata_size(size_t entry_count,
         size_t data_count);
 
@@ -226,7 +215,6 @@ size_t calculate_camera_metadata_size(size_t entry_count,
  * Get current size of entire metadata structure in bytes, including reserved
  * but unused space.
  */
-ANDROID_API
 size_t get_camera_metadata_size(const camera_metadata_t *metadata);
 
 /**
@@ -234,7 +222,6 @@ size_t get_camera_metadata_size(const camera_metadata_t *metadata);
  * unused space. This is the amount of space needed by copy_camera_metadata for
  * its dst buffer.
  */
-ANDROID_API
 size_t get_camera_metadata_compact_size(const camera_metadata_t *metadata);
 
 /**
@@ -243,26 +230,22 @@ size_t get_camera_metadata_compact_size(const camera_metadata_t *metadata);
  * metadata packet must be valid, which can be checked before the call with
  * validate_camera_metadata_structure().
  */
-ANDROID_API
 size_t get_camera_metadata_entry_count(const camera_metadata_t *metadata);
 
 /**
  * Get the maximum number of entries that could fit in the metadata packet.
  */
-ANDROID_API
 size_t get_camera_metadata_entry_capacity(const camera_metadata_t *metadata);
 
 /**
  * Get the current count of bytes used for value storage in the metadata packet.
  */
-ANDROID_API
 size_t get_camera_metadata_data_count(const camera_metadata_t *metadata);
 
 /**
  * Get the maximum count of bytes that could be used for value storage in the
  * metadata packet.
  */
-ANDROID_API
 size_t get_camera_metadata_data_capacity(const camera_metadata_t *metadata);
 
 /**
@@ -279,7 +262,6 @@ size_t get_camera_metadata_data_capacity(const camera_metadata_t *metadata);
  * responsible for freeing the underlying buffer when needed; do not call
  * free_camera_metadata.
  */
-ANDROID_API
 camera_metadata_t *copy_camera_metadata(void *dst, size_t dst_size,
         const camera_metadata_t *src);
 
@@ -307,7 +289,6 @@ enum {
  *                 used as input of clone_camera_metadata and the returned metadata will be valid.
  *
  */
-ANDROID_API
 int validate_camera_metadata_structure(const camera_metadata_t *metadata,
                                        const size_t *expected_size);
 
@@ -317,7 +298,6 @@ int validate_camera_metadata_structure(const camera_metadata_t *metadata,
  * value is returned. On success, 0 is returned. Appending onto a sorted
  * structure results in a non-sorted combined structure.
  */
-ANDROID_API
 int append_camera_metadata(camera_metadata_t *dst, const camera_metadata_t *src);
 
 /**
@@ -326,7 +306,6 @@ int append_camera_metadata(camera_metadata_t *dst, const camera_metadata_t *src)
  * appending the buffer to be cloned into the new buffer. The resulting buffer
  * can be freed with free_camera_metadata(). Returns NULL if cloning failed.
  */
-ANDROID_API
 camera_metadata_t *clone_camera_metadata(const camera_metadata_t *src);
 
 /**
@@ -335,7 +314,6 @@ camera_metadata_t *clone_camera_metadata(const camera_metadata_t *src);
  * added, how much will the value returned by get_camera_metadata_data_count()
  * be increased? This value may be zero, if no extra data storage is needed.
  */
-ANDROID_API
 size_t calculate_camera_metadata_entry_data_size(uint8_t type,
         size_t data_count);
 
@@ -351,7 +329,6 @@ size_t calculate_camera_metadata_entry_data_size(uint8_t type,
  *
  * Returns 0 on success. A non-0 value is returned on error.
  */
-ANDROID_API
 int add_camera_metadata_entry(camera_metadata_t *dst,
         uint32_t tag,
         const void *data,
@@ -364,7 +341,6 @@ int add_camera_metadata_entry(camera_metadata_t *dst,
  *
  * Returns 0 on success. A non-0 value is returned on error.
  */
-ANDROID_API
 int sort_camera_metadata(camera_metadata_t *dst);
 
 /**
@@ -378,7 +354,6 @@ int sort_camera_metadata(camera_metadata_t *dst);
  *
  * Returns 0 on success. A non-0 value is returned on error.
  */
-ANDROID_API
 int get_camera_metadata_entry(camera_metadata_t *src,
         size_t index,
         camera_metadata_entry_t *entry);
@@ -386,7 +361,6 @@ int get_camera_metadata_entry(camera_metadata_t *src,
 /**
  * Get metadata entry at position index, but disallow editing the data.
  */
-ANDROID_API
 int get_camera_metadata_ro_entry(const camera_metadata_t *src,
         size_t index,
         camera_metadata_ro_entry_t *entry);
@@ -399,7 +373,6 @@ int get_camera_metadata_ro_entry(const camera_metadata_t *src,
  * which is returned. To speed up searching for tags, sort the metadata
  * structure first by calling sort_camera_metadata().
  */
-ANDROID_API
 int find_camera_metadata_entry(camera_metadata_t *src,
         uint32_t tag,
         camera_metadata_entry_t *entry);
@@ -407,7 +380,6 @@ int find_camera_metadata_entry(camera_metadata_t *src,
 /**
  * Find an entry with given tag value, but disallow editing the data
  */
-ANDROID_API
 int find_camera_metadata_ro_entry(const camera_metadata_t *src,
         uint32_t tag,
         camera_metadata_ro_entry_t *entry);
@@ -418,7 +390,6 @@ int find_camera_metadata_ro_entry(const camera_metadata_t *src,
  * existing camera_metadata_entry.data pointers to this buffer. Sorting is
  * maintained.
  */
-ANDROID_API
 int delete_camera_metadata_entry(camera_metadata_t *dst,
         size_t index);
 
@@ -431,7 +402,6 @@ int delete_camera_metadata_entry(camera_metadata_t *dst,
  * is updated to match the new buffer state.  Returns a non-zero value if there
  * is no room for the new data in the buffer.
  */
-ANDROID_API
 int update_camera_metadata_entry(camera_metadata_t *dst,
         size_t index,
         const void *data,
@@ -443,7 +413,6 @@ int update_camera_metadata_entry(camera_metadata_t *dst,
  * no such tag is defined. Returns NULL for tags in the vendor section, unless
  * set_vendor_tag_query_ops() has been used.
  */
-ANDROID_API
 const char *get_camera_metadata_section_name(uint32_t tag);
 
 /**
@@ -451,7 +420,6 @@ const char *get_camera_metadata_section_name(uint32_t tag);
  * no such tag is defined. Returns NULL for tags in the vendor section, unless
  * set_vendor_tag_query_ops() has been used.
  */
-ANDROID_API
 const char *get_camera_metadata_tag_name(uint32_t tag);
 
 /**
@@ -459,14 +427,12 @@ const char *get_camera_metadata_tag_name(uint32_t tag);
  * for tags in the vendor section, unless set_vendor_tag_query_ops() has been
  * used.
  */
-ANDROID_API
 int get_camera_metadata_tag_type(uint32_t tag);
 
 /**
  * Retrieve human-readable name of section the tag is in. Returns NULL if
  * no such tag is defined.
  */
-ANDROID_API
 const char *get_local_camera_metadata_section_name(uint32_t tag,
         const camera_metadata_t *meta);
 
@@ -474,21 +440,18 @@ const char *get_local_camera_metadata_section_name(uint32_t tag,
  * Retrieve human-readable name of tag (not including section). Returns NULL if
  * no such tag is defined.
  */
-ANDROID_API
 const char *get_local_camera_metadata_tag_name(uint32_t tag,
         const camera_metadata_t *meta);
 
 /**
  * Retrieve the type of a tag. Returns -1 if no such tag is defined.
  */
-ANDROID_API
 int get_local_camera_metadata_tag_type(uint32_t tag,
         const camera_metadata_t *meta);
 
 /**
  * Retrieve all tags that need permission.
  */
-ANDROID_API
 const int32_t *get_camera_metadata_permission_needed(uint32_t *tag_count);
 
 /**
@@ -550,7 +513,6 @@ struct vendor_tag_query_ops {
  *      metadata will transition to using vendor_tag_ops defined in
  *      camera_vendor_tags.h instead.
  */
-ANDROID_API
 int set_camera_metadata_vendor_tag_ops(const vendor_tag_query_ops_t *query_ops);
 
 /**
@@ -559,7 +521,6 @@ int set_camera_metadata_vendor_tag_ops(const vendor_tag_query_ops_t *query_ops);
  * verbosity = 1: Tag entry information plus at most 16 data values
  * verbosity = 2: All information
  */
-ANDROID_API
 void dump_camera_metadata(const camera_metadata_t *metadata,
         int fd,
         int verbosity);
@@ -568,7 +529,6 @@ void dump_camera_metadata(const camera_metadata_t *metadata,
  * Print fields in the metadata to the log; adds indentation parameter, which
  * specifies the number of spaces to insert before each line of the dump
  */
-ANDROID_API
 void dump_indented_camera_metadata(const camera_metadata_t *metadata,
         int fd,
         int verbosity,
@@ -578,7 +538,6 @@ void dump_indented_camera_metadata(const camera_metadata_t *metadata,
  * Prints the specified tag value as a string. Only works for enum tags.
  * Returns 0 on success, -1 on failure.
  */
-ANDROID_API
 int camera_metadata_enum_snprint(uint32_t tag,
                                  uint32_t value,
                                  char *dst,
@@ -588,7 +547,6 @@ int camera_metadata_enum_snprint(uint32_t tag,
  * Retrieves back the binary value of a given tag enum entry name. Only works for enum tags.
  * Returns 0 on success, -1 on failure.
  */
-ANDROID_API
 int camera_metadata_enum_value(uint32_t tag /*in*/,
                                const char* name /*in*/,
                                size_t size /*in*/,
@@ -604,7 +562,6 @@ int camera_metadata_enum_value(uint32_t tag /*in*/,
  * attempting to use them. The OS will handle standard app and system service processes,
  * but OEMs may need to invoke this method in HALs that process camera data.
  */
-ANDROID_API
 int set_camera_metadata_vendor_ops(const vendor_tag_ops_t *query_ops);
 
 __END_DECLS

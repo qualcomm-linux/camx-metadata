@@ -1,50 +1,26 @@
-**After repository creation:**
-- [ ] Update this `README.md`. Update the Project Name, description, and all sections. Remove this checklist.
-- [ ] **Specify your license.** This template does NOT ship with a default license. Identify your project's approved license per your organization's license approval guidelines. 
-- [ ] **Create `LICENSE.txt`.** Replace the placeholder text in `LICENSE.txt` with the full text of your project's approved license.
-- [ ] **Update the License section** below to name your approved license and link to it.
-- [ ] Search this repo for "REPLACE-ME" and update all instances accordingly
-- [ ] Update `CONTRIBUTING.md` as needed
-- [ ] Review the workflows in `.github/workflows`, updating as needed. See https://docs.github.com/en/actions for information on what these files do and how they work.
-- [ ] Review and update the suggested Issue and PR templates as needed in `.github/ISSUE_TEMPLATE` and `.github/PULL_REQUEST_TEMPLATE`
-- [ ] Remove this checklist
+Camx Metadata
+The camx-metadata is a camera metadata management library that provides a structured interface for handling camera-related metadata in embedded systems. CAMX Metadata is a C library that implements a robust metadata packet system for camera applications. It's based on the Android Open Source Project's camera metadata framework.
 
-# Project Name
+Core Functionality: Metadata Packet Management: Allocates, manages, and manipulates camera metadata structures with fixed capacity for entries and data Entry Operations: Add, retrieve, find, update, and delete metadata entries with type safety Data Type Support: Handles 6 data types (byte, int32, float, int64, double, rational) Sorting & Searching: Supports both linear and binary search for efficient metadata lookups Validation: Comprehensive structure validation to detect corruption or misalignment Vendor Tags: Extensible vendor-specific tag support for OEM customization
 
-*\<update with your project name and a short description\>*
+Memory Management: -Contiguous memory layout for efficient serialization and copying -Proper alignment handling for different data types -Compact and full-size metadata representations -Support for in-place metadata placement in pre-allocated buffers
 
-Project that does ... implemented in ... runs on Qualcomm® *\<processor\>*
+Use Cases: -Camera HAL (Hardware Abstraction Layer) implementations -Camera framework metadata handling -Capture request/result processing -Camera characteristics and capabilities reporting
 
-## Branches
+Compilation Instructions
+Download source code
+Clone the source code from Github:
 
-**main**: Primary development branch. Contributors should develop submissions based on this branch, and submit pull requests to this branch.
+git clone https://github.com/qualcomm-linux/camx-metadata.git
+cd camx-metadata
+Build the source code
+Run CMake to generate the Makefile and build
 
-## Requirements
+cmake -B build -S . -DCMAKE_INSTALL_PREFIX=/usr && cmake --build build
+Development
+Contributions are welcome! Please refer to the CONTRIBUTING.md file for full details on how to contribute to this project, including:
 
-List requirements to run the project, how to install them, instructions to use docker container, etc...
-
-## Installation Instructions
-
-How to install the software itself.
-
-## Usage
-
-Describe how to use the project.
-
-## Development
-
-How to develop new features/fixes for the software. Maybe different than "usage". Also provide details on how to contribute via a [CONTRIBUTING.md file](CONTRIBUTING.md).
-
-## Getting in Contact
-
-How to contact maintainers. E.g. GitHub Issues, GitHub Discussions could be indicated for many cases. However a mail list or list of Maintainer e-mails could be shared for other types of discussions. E.g.
-
-* [Report an Issue on GitHub](../../issues)
-* [Open a Discussion on GitHub](../../discussions)
-* [E-mail us](mailto:REPLACE-ME@qti.qualcomm.com) for general questions
-
-## License
-
-*\<update with your project name and license\>*
-
-*\<REPLACE-ME\>* is licensed under the [REPLACE-ME with license name](https://spdx.org/licenses/REPLACE-ME-with-correct-URL-to-SPDX-license). See [LICENSE.txt](LICENSE.txt) for the full license text.
+Branching strategy
+Submitting a pull request
+License
+camera-service is licensed under the BSD-3-Clause-Clear License. See LICENSE.txt for the full license text.

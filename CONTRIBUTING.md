@@ -1,4 +1,4 @@
-# Contributing to <REPLACE-ME>
+# Contributing to camx-metadata
 
 Hi there!
 We’re thrilled that you’d like to contribute to this project.
@@ -14,7 +14,7 @@ In general, contributors should develop on branches based off of `main` and pull
 1. [Fork](https://github.com/qualcomm/<REPLACE-ME>/fork) and clone the repository.
 
     ```bash
-    git clone https://github.com/<username>/<REPLACE-ME>.git
+    git clone https://github.com/<username>/camx-metadata.git
     ```
 
 1. Create a new branch based on `main`:
@@ -26,7 +26,7 @@ In general, contributors should develop on branches based off of `main` and pull
 1. Create an upstream `remote` to make it easier to keep your branches up-to-date:
 
     ```bash
-    git remote add upstream https://github.com/qualcomm/<REPLACE-ME>.git
+    git remote add upstream https://github.com/qualcomm/camx-metadata.git
     ```
 
 1. Make your changes, add tests, and make sure the tests still pass.

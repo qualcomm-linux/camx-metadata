@@ -1,9 +1,10 @@
 /*
-* Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-* SPDX-License-Identifier: BSD-3-Clause-Clear
-*/
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 /*
- * Copyright (C) 2012 The Android Open Source Project
+ * Copyright 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,177 +19,143 @@
  * limitations under the License.
  */
 
+#ifndef SYSTEM_MEDIA_INCLUDE_ANDROID_CAMERA_VENDOR_TAGS_H
+#define SYSTEM_MEDIA_INCLUDE_ANDROID_CAMERA_VENDOR_TAGS_H
+
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
+#define CAMERA_METADATA_VENDOR_TAG_BOUNDARY 0x80000000u
+#define CAMERA_METADATA_INVALID_VENDOR_ID UINT64_MAX
+
+typedef uint64_t metadata_vendor_id_t;
+
 /**
- * Fake vendor extensions for testing
+ * Vendor tags:
+ *
+ * This structure contains basic functions for enumerating an immutable set of
+ * vendor-defined camera metadata tags, and querying static information about
+ * their structure/type.  The intended use of this information is to validate
+ * the structure of metadata returned by the camera HAL, and to allow vendor-
+ * defined metadata tags to be visible in application facing camera API.
  */
+typedef struct vendor_tag_ops vendor_tag_ops_t;
+struct vendor_tag_ops {
+    /**
+     * Get the number of vendor tags supported on this platform. Used to
+     * calculate the size of buffer needed for holding the array of all tags
+     * returned by get_all_tags().  This must return -1 on error.
+     */
+    int (*get_tag_count)(const vendor_tag_ops_t *v);
 
-#ifndef TESTING_CAMERA_METADATA_FAKEVENDOR_H
-#define TESTING_CAMERA_METADATA_FAKEVENDOR_H
+    /**
+     * Fill an array with all of the supported vendor tags on this platform.
+     * get_tag_count() must return the number of tags supported, and
+     * tag_array will be allocated with enough space to hold the number of tags
+     * returned by get_tag_count().
+     */
+    void (*get_all_tags)(const vendor_tag_ops_t *v, uint32_t *tag_array);
 
-#include <stdint.h>
+    /**
+     * Get the vendor section name for a vendor-specified entry tag. This will
+     * only be called for vendor-defined tags.
+     *
+     * The naming convention for the vendor-specific section names should
+     * follow a style similar to the Java package style.  For example,
+     * CameraZoom Inc. must prefix their sections with "com.camerazoom."
+     * This must return NULL if the tag is outside the bounds of
+     * vendor-defined sections.
+     *
+     * There may be different vendor-defined tag sections, for example the
+     * phone maker, the chipset maker, and the camera module maker may each
+     * have their own "com.vendor."-prefixed section.
+     *
+     * The memory pointed to by the return value must remain valid for the
+     * lifetime of the module, and is owned by the module.
+     */
+    const char *(*get_section_name)(const vendor_tag_ops_t *v, uint32_t tag);
 
-#include <system/camera_metadata.h>
-#include <system/camera_vendor_tags.h>
+    /**
+     * Get the tag name for a vendor-specified entry tag. This is only called
+     * for vendor-defined tags, and must return NULL if it is not a
+     * vendor-defined tag.
+     *
+     * The memory pointed to by the return value must remain valid for the
+     * lifetime of the module, and is owned by the module.
+     */
+    const char *(*get_tag_name)(const vendor_tag_ops_t *v, uint32_t tag);
 
-enum vendor_extension_section {
-    FAKEVENDOR_SENSOR = VENDOR_SECTION,
-    FAKEVENDOR_SENSOR_INFO,
-    FAKEVENDOR_COLORCORRECTION,
-    FAKEVENDOR_SCALER,
-    FAKEVENDOR_SECTION_END
+    /**
+     * Get tag type for a vendor-specified entry tag. The type returned must be
+     * a valid type defined in camera_metadata.h.  This method is only called
+     * for tags >= CAMERA_METADATA_VENDOR_TAG_BOUNDARY, and must return
+     * -1 if the tag is outside the bounds of the vendor-defined sections.
+     */
+    int (*get_tag_type)(const vendor_tag_ops_t *v, uint32_t tag);
+
+    /* Reserved for future use.  These must be initialized to NULL. */
+    void* reserved[8];
 };
 
-const int FAKEVENDOR_SECTION_COUNT = FAKEVENDOR_SECTION_END - VENDOR_SECTION;
+struct vendor_tag_cache_ops {
+    /**
+     * Get the number of vendor tags supported on this platform. Used to
+     * calculate the size of buffer needed for holding the array of all tags
+     * returned by get_all_tags().  This must return -1 on error.
+     */
+    int (*get_tag_count)(metadata_vendor_id_t id);
 
-enum vendor_extension_section_ranges {
-    FAKEVENDOR_SENSOR_START          = FAKEVENDOR_SENSOR << 16,
-    FAKEVENDOR_SENSOR_I_START        = FAKEVENDOR_SENSOR_INFO << 16,
-    FAKEVENDOR_COLORCORRECTION_START = FAKEVENDOR_COLORCORRECTION << 16,
-    FAKEVENDOR_SCALER_START          = FAKEVENDOR_SCALER << 16
+    /**
+     * Fill an array with all of the supported vendor tags on this platform.
+     * get_tag_count() must return the number of tags supported, and
+     * tag_array will be allocated with enough space to hold the number of tags
+     * returned by get_tag_count().
+     */
+    void (*get_all_tags)(uint32_t *tag_array, metadata_vendor_id_t id);
+
+    /**
+     * Get the vendor section name for a vendor-specified entry tag. This will
+     * only be called for vendor-defined tags.
+     *
+     * The naming convention for the vendor-specific section names should
+     * follow a style similar to the Java package style.  For example,
+     * CameraZoom Inc. must prefix their sections with "com.camerazoom."
+     * This must return NULL if the tag is outside the bounds of
+     * vendor-defined sections.
+     *
+     * There may be different vendor-defined tag sections, for example the
+     * phone maker, the chipset maker, and the camera module maker may each
+     * have their own "com.vendor."-prefixed section.
+     *
+     * The memory pointed to by the return value must remain valid for the
+     * lifetime of the module, and is owned by the module.
+     */
+    const char *(*get_section_name)(uint32_t tag, metadata_vendor_id_t id);
+
+    /**
+     * Get the tag name for a vendor-specified entry tag. This is only called
+     * for vendor-defined tags, and must return NULL if it is not a
+     * vendor-defined tag.
+     *
+     * The memory pointed to by the return value must remain valid for the
+     * lifetime of the module, and is owned by the module.
+     */
+    const char *(*get_tag_name)(uint32_t tag, metadata_vendor_id_t id);
+
+    /**
+     * Get tag type for a vendor-specified entry tag. The type returned must be
+     * a valid type defined in camera_metadata.h.  This method is only called
+     * for tags >= CAMERA_METADATA_VENDOR_TAG_BOUNDARY, and must return
+     * -1 if the tag is outside the bounds of the vendor-defined sections.
+     */
+    int (*get_tag_type)(uint32_t tag, metadata_vendor_id_t id);
+
+    /* Reserved for future use.  These must be initialized to NULL. */
+    void* reserved[8];
 };
 
-enum vendor_extension_tags {
-    FAKEVENDOR_SENSOR_SUPERMODE = FAKEVENDOR_SENSOR_START,
-    FAKEVENDOR_SENSOR_DOUBLE_EXPOSURE,
-    FAKEVENDOR_SENSOR_END,
+__END_DECLS
 
-    FAKEVENDOR_SENSOR_AVAILABLE_SUPERMODES = FAKEVENDOR_SENSOR_I_START,
-    FAKEVENDOR_SENSOR_I_END,
+#endif /* SYSTEM_MEDIA_INCLUDE_ANDROID_CAMERA_VENDOR_TAGS_H */
 
-    FAKEVENDOR_COLORCORRECTION_3DLUT_MODE = FAKEVENDOR_COLORCORRECTION_START,
-    FAKEVENDOR_COLORCORRECTION_3DLUT_TABLES,
-    FAKEVENDOR_COLORCORRECTION_END,
-
-    FAKEVENDOR_SCALER_DOWNSCALE_MODE = FAKEVENDOR_SCALER_START,
-    FAKEVENDOR_SCALER_DOWNSCALE_COEFF,
-    FAKEVENDOR_SCALER_END
-};
-
-typedef struct vendor_tag_info {
-    const char *tag_name;
-    uint8_t     tag_type;
-} vendor_tag_info_t;
-
-const char *fakevendor_section_names[FAKEVENDOR_SECTION_COUNT] = {
-    "com.fakevendor.sensor",
-    "com.fakevendor.sensor.info",
-    "com.fakevendor.colorCorrection",
-    "com.fakevendor.scaler"
-};
-
-uint32_t fakevendor_section_bounds[FAKEVENDOR_SECTION_COUNT][2] = {
-    { (uint32_t) FAKEVENDOR_SENSOR_START,          (uint32_t) FAKEVENDOR_SENSOR_END },
-    { (uint32_t) FAKEVENDOR_SENSOR_I_START,        (uint32_t) FAKEVENDOR_SENSOR_I_END },
-    { (uint32_t) FAKEVENDOR_COLORCORRECTION_START, (uint32_t) FAKEVENDOR_COLORCORRECTION_END },
-    { (uint32_t) FAKEVENDOR_SCALER_START,          (uint32_t) FAKEVENDOR_SCALER_END}
-};
-
-vendor_tag_info_t fakevendor_sensor[FAKEVENDOR_SENSOR_END -
-        FAKEVENDOR_SENSOR_START] = {
-    { "superMode",       TYPE_BYTE },
-    { "doubleExposure",  TYPE_INT64 }
-};
-
-vendor_tag_info_t fakevendor_sensor_info[FAKEVENDOR_SENSOR_I_END -
-        FAKEVENDOR_SENSOR_I_START] = {
-    { "availableSuperModes",   TYPE_BYTE }
-};
-
-vendor_tag_info_t fakevendor_color_correction[FAKEVENDOR_COLORCORRECTION_END -
-        FAKEVENDOR_COLORCORRECTION_START] = {
-    { "3dLutMode",   TYPE_BYTE },
-    { "3dLutTables", TYPE_FLOAT }
-};
-
-vendor_tag_info_t fakevendor_scaler[FAKEVENDOR_SCALER_END -
-        FAKEVENDOR_SCALER_START] = {
-    { "downscaleMode",  TYPE_BYTE },
-    { "downscaleCoefficients", TYPE_FLOAT }
-};
-
-vendor_tag_info_t *fakevendor_tag_info[FAKEVENDOR_SECTION_COUNT] = {
-    fakevendor_sensor,
-    fakevendor_sensor_info,
-    fakevendor_color_correction,
-    fakevendor_scaler
-};
-
-const char *get_fakevendor_section_name(const vendor_tag_ops_t *v,
-        uint32_t tag);
-const char *get_fakevendor_tag_name(const vendor_tag_ops_t *v,
-        uint32_t tag);
-int get_fakevendor_tag_type(const vendor_tag_ops_t *v,
-        uint32_t tag);
-int get_fakevendor_tag_count(const vendor_tag_ops_t *v);
-void get_fakevendor_tags(const vendor_tag_ops_t *v, uint32_t *tag_array);
-
-static const vendor_tag_ops_t fakevendor_ops = {
-    get_fakevendor_tag_count,
-    get_fakevendor_tags,
-    get_fakevendor_section_name,
-    get_fakevendor_tag_name,
-    get_fakevendor_tag_type,
-    {NULL}
-};
-
-const char *get_fakevendor_section_name(const vendor_tag_ops_t *v,
-        uint32_t tag) {
-    if (v != &fakevendor_ops) return NULL;
-    int tag_section = (tag >> 16) - VENDOR_SECTION;
-    if (tag_section < 0 ||
-            tag_section >= FAKEVENDOR_SECTION_COUNT) return NULL;
-
-    return fakevendor_section_names[tag_section];
-}
-
-const char *get_fakevendor_tag_name(const vendor_tag_ops_t *v,
-        uint32_t tag) {
-    if (v != &fakevendor_ops) return NULL;
-    int tag_section = (tag >> 16) - VENDOR_SECTION;
-    if (tag_section < 0
-            || tag_section >= FAKEVENDOR_SECTION_COUNT
-            || tag >= fakevendor_section_bounds[tag_section][1]) return NULL;
-    int tag_index = tag & 0xFFFF;
-    return fakevendor_tag_info[tag_section][tag_index].tag_name;
-}
-
-int get_fakevendor_tag_type(const vendor_tag_ops_t *v,
-        uint32_t tag) {
-    if (v != &fakevendor_ops) return -1;
-    int tag_section = (tag >> 16) - VENDOR_SECTION;
-    if (tag_section < 0
-            || tag_section >= FAKEVENDOR_SECTION_COUNT
-            || tag >= fakevendor_section_bounds[tag_section][1]) return -1;
-    int tag_index = tag & 0xFFFF;
-    return fakevendor_tag_info[tag_section][tag_index].tag_type;
-}
-
-int get_fakevendor_tag_count(const vendor_tag_ops_t *v) {
-    int section;
-    unsigned int start, end;
-    int count = 0;
-
-    if (v != &fakevendor_ops) return -1;
-    for (section = 0; section < FAKEVENDOR_SECTION_COUNT; section++) {
-        start = fakevendor_section_bounds[section][0];
-        end = fakevendor_section_bounds[section][1];
-        count += end - start;
-    }
-    return count;
-}
-
-void get_fakevendor_tags(const vendor_tag_ops_t *v, uint32_t *tag_array) {
-    int section;
-    unsigned int start, end, tag;
-
-    if (v != &fakevendor_ops || tag_array == NULL) return;
-    for (section = 0; section < FAKEVENDOR_SECTION_COUNT; section++) {
-        start = fakevendor_section_bounds[section][0];
-        end = fakevendor_section_bounds[section][1];
-        for (tag = start; tag < end; tag++) {
-            *tag_array++ = tag;
-        }
-    }
-}
-
-#endif

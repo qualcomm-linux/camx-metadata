@@ -1,3 +1,6 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
 cmake_minimum_required(VERSION 3.16)
 
 # Define version - can be passed from Yocto via command line

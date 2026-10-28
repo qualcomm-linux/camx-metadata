@@ -53,4 +53,21 @@ Contributions are welcome! Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md
 
 ## License
 
-camera-service is licensed under the [BSD-3-Clause-Clear License](https://spdx.org/licenses/BSD-3-Clause-Clear.html). See [LICENSE.txt](LICENSE.txt) for the full license text.
+camx-metadata is based on the camera metadata library from the Android Open
+Source Project ([platform/system/media](https://android.googlesource.com/platform/system/media)),
+and is distributed under the following licenses:
+
+- The code under `camera/` and `private/camera/`, imported from AOSP, is
+  licensed under the [Apache License 2.0](https://spdx.org/licenses/Apache-2.0.html).
+  See [LICENSES/Apache-2.0.txt](LICENSES/Apache-2.0.txt) for the full license
+  text. Files modified from AOSP carry a notice describing the change.
+  Where those changes were written by Qualcomm Technologies, Inc., they are
+  licensed under the
+  [BSD-3-Clause-Clear License](https://spdx.org/licenses/BSD-3-Clause-Clear.html),
+  and the file is tagged `SPDX-License-Identifier: Apache-2.0 AND BSD-3-Clause-Clear`.
+- The build files written for this project (`CMakeLists.txt` and
+  `camx_metadata.pc.in`) are licensed under the
+  [BSD-3-Clause-Clear License](https://spdx.org/licenses/BSD-3-Clause-Clear.html).
+  See [LICENSE.txt](LICENSE.txt) for the full license text.
+
+Each source file states its license with an `SPDX-License-Identifier` tag.

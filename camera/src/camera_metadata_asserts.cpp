@@ -1,10 +1,6 @@
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
- * SPDX-License-Identifier: BSD-3-Clause-Clear
- */
-
-/*
  * Copyright (C) 2022 The Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
+ * Modified by Qualcomm Technologies, Inc.: reverted AOSP commit 3eed469064f1
+ * ("Update ColorSpaceProfiles docs to reflect limited ColorSpace choices.")
+ * to restore the full list of color space profiles.
  */
 
 /**
